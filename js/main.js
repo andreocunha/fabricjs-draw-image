@@ -1,8 +1,10 @@
 let canvas = new fabric.Canvas('canvas');
+let hammer = new Hammer(canvas.upperCanvasEl);
 let imageObj;
 let addShapeMode = false;
 let drawingMode = false;
 let overlay;
+let lastZoom = canvas.getZoom();
 
 const MAX_ZOOM = 20;
 const MIN_ZOOM = 1;
@@ -64,3 +66,7 @@ canvas.on('object:added', updateClipPath);
 canvas.on('object:scaling', updateClipPath);
 canvas.on('object:moving', updateClipPath);
 canvas.on('object:rotating', updateClipPath);
+
+hammer.get('pinch').set({ enable: true });
+hammer.on('pinch', onPinch);
+hammer.on('pinchend', onPinchEnd);
