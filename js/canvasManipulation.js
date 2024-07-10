@@ -57,3 +57,30 @@ function smoothCenterViewport() {
         canvas.on('mouse:wheel', onMouseWheel);
     }, duration);
 }
+
+// Adiciona evento de roda do mouse
+canvas.on('mouse:wheel', onMouseWheel);
+
+// Inicializa Hammer.js para detectar gestos de toque
+const hammer = new Hammer(canvas.wrapperEl);
+
+// Configura detecção de pinça
+hammer.get('pinch').set({ enable: true });
+
+let lastZoom = canvas.getZoom();
+hammer.on('pinch', (e) => {
+    let zoom = lastZoom * e.scale;
+    if (zoom > MAX_ZOOM) zoom = MAX_ZOOM;
+    if (zoom < MIN_ZOOM) zoom = MIN_ZOOM;
+
+    const center = { x: canvas.width / 2, y: canvas.height / 2 };
+    canvas.zoomToPoint(center, zoom);
+    
+    if (zoom === MIN_ZOOM) {
+        smoothCenterViewport();
+    }
+});
+
+hammer.on('pinchend', (e) => {
+    lastZoom = canvas.getZoom();
+});

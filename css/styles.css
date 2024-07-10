@@ -6,6 +6,7 @@ body, html {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 #canvas-container {
@@ -15,11 +16,11 @@ body, html {
     object-fit: contain;
     width: 100vw;
     height: 75vw;
-    background-color: gray;
+    background-color: black;
 }
 
 #canvas {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     background-color: black;
     width: 100vw;
     height: 75vw;
