@@ -1,4 +1,5 @@
 function updateClipPath(event) {
+    return;
     if(event && (event.target.type === 'image' || event.target === overlay)) return;
     const objectsCanvas = canvas.getObjects().filter(obj => obj.type !== 'image' && obj !== overlay);
 
