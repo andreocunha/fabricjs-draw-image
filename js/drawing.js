@@ -72,8 +72,8 @@ function finalizeDrawing() {
         });
         canvas.remove(lastPath);
         canvas.add(path);
-        canvas.renderAll();
+        // canvas.renderAll();
     }
     canvas.isDrawingMode = true;
-    updateClipPath();
+    // updateClipPath();
 }

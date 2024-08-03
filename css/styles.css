@@ -15,15 +15,14 @@ body, html {
     align-items: center;
     object-fit: contain;
     width: 100vw;
-    height: 75vw;
-    background-color: black;
+    height: 100vh;
+    background-color: gray;
 }
 
 #canvas {
-    /* border: 1px solid green; */
-    background-color: black;
+    background-color: #000000;
     width: 100vw;
-    height: 75vw;
+    height: 100vh;
     object-fit: contain;
 }
 

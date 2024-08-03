@@ -1,5 +1,7 @@
 function onMouseWheel(opt) {
     let delta = opt.e.deltaY;
+    opt.e.preventDefault();
+    opt.e.stopPropagation();
     let zoom = canvas.getZoom();
     zoom *= 0.999 ** delta;
     if (zoom > MAX_ZOOM) zoom = MAX_ZOOM;
@@ -9,15 +11,14 @@ function onMouseWheel(opt) {
     
     canvas.zoomToPoint({ x: mouse.x, y: mouse.y }, zoom);
 
-    opt.e.preventDefault();
-    opt.e.stopPropagation();
-
     if (zoom === MIN_ZOOM) {
         smoothCenterViewport();
     }
 }
 
+
 function smoothCenterViewport() {
+    // console.log('smoothCenterViewport');
     let vpt = canvas.viewportTransform;
     if (!vpt) return;
 
@@ -65,11 +66,14 @@ function onPinch(e) {
 
     const center = { x: canvas.width / 2, y: canvas.height / 2 };
     canvas.zoomToPoint(center, zoom);
-    
+
     if (zoom === MIN_ZOOM) {
         smoothCenterViewport();
+    } else {
+
     }
 }
+
 
 function onPinchEnd() {
     lastZoom = canvas.getZoom();

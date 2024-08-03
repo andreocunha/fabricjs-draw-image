@@ -1,5 +1,6 @@
 function updateClipPath(event) {
-    return;
+    // console.log('updateClipPath');
+    // return;
     if(event && (event.target.type === 'image' || event.target === overlay)) return;
     const objectsCanvas = canvas.getObjects().filter(obj => obj.type !== 'image' && obj !== overlay);
 
@@ -41,7 +42,7 @@ function updateClipPath(event) {
         clipPath: clipGroup
     });
 
-    canvas.requestRenderAll();
+    // canvas.requestRenderAll();
 }
 
 function onKeyDown(e) {
@@ -56,7 +57,7 @@ function onKeyDown(e) {
 function addDeleteBtnHandler(eventData, transform) {
     let target = transform.target;
     canvas.remove(target);
-    canvas.requestRenderAll();
+    // canvas.requestRenderAll();
 }
 
 function renderIcon(ctx, left, top, styleOverride, fabricObject) {

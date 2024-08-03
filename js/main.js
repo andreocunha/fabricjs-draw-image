@@ -25,23 +25,24 @@ resizeCanvas();
 
 fabric.Image.fromURL(IMAGE_WALL, function (img) {
     imageObj = img;
-    centerAndScaleImage();
     img.selectable = false;
+
     canvas.add(img);
     canvas.sendToBack(img);
 
     overlay = new fabric.Rect({
         left: 0,
         top: 0,
-        width: canvas.width,
-        height: canvas.height,
+        width: img.width,
+        height: img.height,
         fill: 'rgba(0, 0, 0, 0.6)',
         selectable: false,
         evented: false
     });
 
     canvas.add(overlay);
-    canvas.renderAll();
+    centerAndScaleContent();
+    // canvas.renderAll();
     loadCanvasState();
 });
 

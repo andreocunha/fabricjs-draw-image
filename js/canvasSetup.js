@@ -1,63 +1,44 @@
 function resizeCanvas() {
     let container = document.getElementById('canvas-container');
-    let prevWidth = canvas.width;
-    let prevHeight = canvas.height;
     
+    // Canvas ocupa todo o dispositivo
     let containerWidth = container.clientWidth;
     let containerHeight = container.clientHeight;
-
-    // Calcular a nova largura e altura mantendo a proporção 4:3
-    const aspectRatio = 4 / 3;
-    let newWidth, newHeight;
-    if (containerWidth / aspectRatio <= containerHeight) {
-        newWidth = containerWidth;
-        newHeight = containerWidth / aspectRatio;
-    } else {
-        newHeight = containerHeight;
-        newWidth = containerHeight * aspectRatio;
-    }
-
-    canvas.setWidth(newWidth);
-    canvas.setHeight(newHeight);
+    
+    canvas.setWidth(containerWidth);
+    canvas.setHeight(containerHeight);
     canvas.calcOffset();
 
-    let scaleX = newWidth / prevWidth;
-    let scaleY = newHeight / prevHeight;
-
-    canvas.getObjects().forEach(obj => {
-        // Redimensiona e reposiciona objetos, exceto a imagem de fundo e a sobreposição
-        if (obj.type !== 'image' && obj !== overlay) {
-            obj.set({
-                scaleX: obj.scaleX * scaleX,
-                scaleY: obj.scaleY * scaleY,
-                left: obj.left * scaleX,
-                top: obj.top * scaleY
-            });
-            obj.setCoords();
-        }
-    });
-
-    centerAndScaleImage();
-    updateClipPath();
-    canvas.renderAll();
+    centerAndScaleContent();
+    // updateClipPath();
+    // console.log('resizeCanvas');
+    // canvas.renderAll();
 }
 
-function centerAndScaleImage() {
+function centerAndScaleContent() {
     if (!imageObj) return;
 
-    let canvasAspect = canvas.width / canvas.height;
-    let imgAspect = imageObj.width / imageObj.height;
-    let scaleFactor;
-
-    if (canvasAspect >= imgAspect) {
-        scaleFactor = canvas.height / imageObj.height;
+    let canvasWidth = canvas.width;
+    let canvasHeight = canvas.height;
+    
+    const aspectRatio = 4 / 3;
+    let contentWidth, contentHeight;
+    
+    if (canvasWidth / aspectRatio <= canvasHeight) {
+        contentWidth = canvasWidth;
+        contentHeight = canvasWidth / aspectRatio;
     } else {
-        scaleFactor = canvas.width / imageObj.width;
+        contentHeight = canvasHeight;
+        contentWidth = canvasHeight * aspectRatio;
     }
+    
+    let scaleFactorX = contentWidth / imageObj.width;
+    let scaleFactorY = contentHeight / imageObj.height;
+    let scaleFactor = Math.min(scaleFactorX, scaleFactorY);
 
     imageObj.set({
-        left: canvas.width / 2,
-        top: canvas.height / 2,
+        left: canvasWidth / 2,
+        top: canvasHeight / 2,
         originX: 'center',
         originY: 'center',
         scaleX: scaleFactor,
@@ -66,10 +47,13 @@ function centerAndScaleImage() {
 
     if (overlay) {
         overlay.set({
-            width: canvas.width,
-            height: canvas.height
+            left: canvasWidth / 2,
+            top: canvasHeight / 2,
+            originX: 'center',
+            originY: 'center',
+            width: imageObj.width * scaleFactor,
+            height: imageObj.height * scaleFactor
         });
     }
-    
-    canvas.renderAll();
+    // console.log('centerAndScaleContent');
 }

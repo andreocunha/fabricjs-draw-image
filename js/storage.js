@@ -1,10 +1,9 @@
-// Função para salvar objetos do canvas e dimensões no localStorage
 function saveCanvasState() {
     const objects = canvas.getObjects().filter(obj => obj.type !== 'image' && obj !== overlay);
     const objectsState = objects.map(obj => obj.toJSON(['selectable', 'evented', 'shadow']));
     const canvasState = {
-        width: canvas.width,
-        height: canvas.height,
+        width: imageObj.width * imageObj.scaleX,
+        height: imageObj.height * imageObj.scaleY,
         objects: objectsState
     };
     localStorage.setItem('canvasState', JSON.stringify(canvasState));
@@ -18,8 +17,12 @@ function loadCanvasState() {
         const canvasState = JSON.parse(canvasStateJSON);
         const savedCanvasWidth = canvasState.width;
         const savedCanvasHeight = canvasState.height;
-        const currentCanvasWidth = canvas.width;
-        const currentCanvasHeight = canvas.height;
+        const currentCanvasWidth = imageObj.width * imageObj.scaleX;
+        const currentCanvasHeight = imageObj.height * imageObj.scaleY;
+        console.log('savedCanvasWidth', savedCanvasWidth);
+        console.log('savedCanvasHeight', savedCanvasHeight);
+        console.log('currentCanvasWidth', currentCanvasWidth);
+        console.log('currentCanvasHeight', currentCanvasHeight);
         
         const scaleX = currentCanvasWidth / savedCanvasWidth;
         const scaleY = currentCanvasHeight / savedCanvasHeight;
@@ -28,13 +31,15 @@ function loadCanvasState() {
             enlivenedObjects.forEach(function (fabricObj) {
                 fabricObj.scaleX *= scaleX;
                 fabricObj.scaleY *= scaleY;
-                fabricObj.left *= scaleX;
-                fabricObj.top *= scaleY;
+                fabricObj.left = (fabricObj.left - savedCanvasWidth / 2) * scaleX + currentCanvasWidth / 2;
+                fabricObj.top = (fabricObj.top - savedCanvasHeight / 2) * scaleY + currentCanvasHeight / 2;
                 fabricObj.setCoords();
                 canvas.add(fabricObj);
+                console.log('left', fabricObj.left);
+                console.log('top', fabricObj.top);
             });
             canvas.renderAll();
-            updateClipPath();
+            // updateClipPath();
             console.log('Estado do canvas carregado com sucesso!');
         });
     }
